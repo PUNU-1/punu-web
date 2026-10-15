@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brewline Coffee – Landing Page</title>
+<style>
+  :root{--cream:#faf4ec;--brown:#3b2418;--accent:#c2703d;--text:#2a1b12}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Georgia,serif;color:var(--text);background:var(--cream)}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:20px 8%;font-family:system-ui,sans-serif}
+  nav b{font-size:22px;color:var(--brown)}nav a{margin-left:24px;color:var(--text);text-decoration:none;font-size:14px}
+  .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding:50px 8% 70px}
+  .hero h1{font-size:56px;line-height:1.05;margin:0 0 18px;color:var(--brown)}
+  .hero p{font-family:system-ui,sans-serif;font-size:18px;line-height:1.6;max-width:480px}
+  .btn{display:inline-block;margin-top:18px;padding:14px 28px;background:var(--accent);color:#fff;border-radius:99px;text-decoration:none;font-family:system-ui,sans-serif;font-weight:600}
+  .img{height:380px;border-radius:200px 200px 24px 24px;background:radial-gradient(circle at 30% 30%,#e0a070,#8a4a22 60%,#3b2418);display:grid;place-items:center;font-size:120px}
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:0 8% 60px;font-family:system-ui,sans-serif}
+  .feat div{background:#fff;padding:26px;border-radius:18px;box-shadow:0 8px 24px #3b241810}
+  .feat h3{margin:0 0 8px;color:var(--brown)}.feat p{margin:0;color:#6b5546;line-height:1.5;font-size:14px}
+  .menu{background:var(--brown);color:var(--cream);padding:60px 8%;font-family:system-ui,sans-serif}
+  .menu h2{font-family:Georgia,serif;font-size:34px;margin:0 0 24px}
+  .item{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px dashed #ffffff30}
+  footer{padding:30px 8%;text-align:center;font-family:system-ui,sans-serif;font-size:13px;color:#7a6455}
+  @media(max-width:760px){.hero{grid-template-columns:1fr}.hero h1{font-size:40px}.feat{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav><b>☕ Brewline</b><div><a href="#">Menu</a><a href="#">About</a><a href="#">Visit</a></div></nav>
+<section class="hero">
+  <div><h1>Coffee worth slowing down for.</h1><p>Small-batch roasted beans, brewed fresh every morning. Come in, sit down, stay a while.</p><a class="btn" href="#">Order now</a></div>
+  <div class="img">☕</div>
+</section>
+<section class="feat">
+  <div><h3>Fresh roasted</h3><p>Beans roasted in-house twice a week.</p></div>
+  <div><h3>Ethically sourced</h3><p>Direct partnerships with family farms.</p></div>
+  <div><h3>Cozy space</h3><p>Fast Wi-Fi and plenty of sockets for remote work.</p></div>
+</section>
+<section class="menu"><h2>Menu</h2>
+  <div class="item"><span>Espresso</span><span>2.50</span></div>
+  <div class="item"><span>Flat white</span><span>4.00</span></div>
+  <div class="item"><span>Cold brew</span><span>4.50</span></div>
+  <div class="item"><span>Cardamom latte</span><span>4.80</span></div>
+</section>
+<footer>Sample project – fictional brand. Designed &amp; built as a portfolio example.</footer>
+</body>
+</html>

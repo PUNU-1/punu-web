@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AutoFlow – Automation Dashboard</title>
+<style>
+  :root{--bg:#0e1117;--card:#161b26;--line:#ffffff12;--text:#e7eaf3;--mut:#8b93a7;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--acc:#60a5fa}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;padding:28px}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+  h1{margin:0;font-size:24px}header span{color:var(--mut);font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .card small{color:var(--mut)}.card .v{font-size:30px;font-weight:700;margin-top:6px}
+  .up{color:var(--ok);font-size:13px}
+  .row{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+  svg{width:100%;height:220px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  td,th{padding:10px 6px;text-align:left;border-bottom:1px solid var(--line)}th{color:var(--mut);font-weight:500}
+  .pill{padding:3px 10px;border-radius:99px;font-size:12px}
+  .ok{background:#34d39922;color:var(--ok)}.run{background:#60a5fa22;color:var(--acc)}.fail{background:#f8717122;color:var(--bad)}
+  .sw{width:38px;height:22px;background:#2a3142;border-radius:99px;position:relative;cursor:pointer;display:inline-block}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
+  .sw.on{background:var(--ok)}.sw.on::after{left:19px}
+  @media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>AutoFlow</h1><span id="clock"></span></header>
+<div class="grid">
+  <div class="card"><small>Tasks automated</small><div class="v" id="k1">1,284</div><div class="up">▲ 12% this week</div></div>
+  <div class="card"><small>Hours saved</small><div class="v" id="k2">342</div><div class="up">▲ 8%</div></div>
+  <div class="card"><small>Success rate</small><div class="v">98.6%</div><div class="up">▲ 0.4%</div></div>
+  <div class="card"><small>Active workflows</small><div class="v" id="k4">0</div><div class="up">live</div></div>
+</div>
+<div class="row">
+  <div class="card"><b>Runs per day</b><svg id="ch" viewBox="0 0 600 220" preserveAspectRatio="none"></svg></div>
+  <div class="card"><b>Workflows</b><table id="wf"></table></div>
+</div>
+<div class="card" style="margin-top:16px"><b>Recent runs</b><table id="runs"></table></div>
+<script>
+const wfs=[['Invoice → Sheets',1],['Telegram bot alerts',1],['Daily report email',1],['Web scraper',0],['Backup to Drive',1]];
+function renderWf(){document.getElementById('wf').innerHTML=wfs.map((w,i)=>`<tr><td>${w[0]}</td><td style="text-align:right"><span class="sw ${w[1]?'on':''}" data-i="${i}"></span></td></tr>`).join('');document.getElementById('k4').textContent=wfs.filter(w=>w[1]).length}
+document.getElementById('wf').onclick=e=>{const s=e.target.closest('.sw');if(s){wfs[s.dataset.i][1]^=1;renderWf()}};
+renderWf();
+const data=[40,55,48,70,64,90,82,100,95,120,110,135];
+const max=Math.max(...data),pts=data.map((d,i)=>[i*(600/(data.length-1)),210-d/max*190]);
+const path=pts.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' ');
+document.getElementById('ch').innerHTML=`<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#60a5fa" stop-opacity=".35"/><stop offset="1" stop-color="#60a5fa" stop-opacity="0"/></linearGradient></defs><path d="${path} L600 220 L0 220Z" fill="url(#g)"/><path d="${path}" fill="none" stroke="#60a5fa" stroke-width="3" vector-effect="non-scaling-stroke"/>`;
+const names=['Invoice → Sheets','Telegram bot alerts','Daily report email','Backup to Drive','Web scraper'];
+function row(i){const s=['ok','ok','ok','run','fail'][Math.floor(Math.random()*5)],l={ok:'Success',run:'Running',fail:'Failed'}[s];return `<tr><td>#${1400-i}</td><td>${names[i%5]}</td><td>${(Math.random()*4+.3).toFixed(1)}s</td><td><span class="pill ${s}">${l}</span></td></tr>`}
+document.getElementById('runs').innerHTML='<tr><th>ID</th><th>Workflow</th><th>Time</th><th>Status</th></tr>'+Array.from({length:6},(_,i)=>row(i)).join('');
+setInterval(()=>document.getElementById('clock').textContent=new Date().toLocaleString(),1000);
+let k=1284;setInterval(()=>{k+=Math.floor(Math.random()*3);document.getElementById('k1').textContent=k.toLocaleString()},2000);
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chatly – Messenger UI</title>
+<style>
+  :root{--bg:#0f1220;--side:#151a2e;--panel:#1b2140;--me:#4f46e5;--them:#262d52;--text:#e8ebf8;--mut:#8e96b8}
+  *{box-sizing:border-box}
+  body{margin:0;height:100vh;display:flex;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif}
+  .side{width:300px;background:var(--side);border-right:1px solid #ffffff10;display:flex;flex-direction:column}
+  .side h2{margin:0;padding:20px;font-size:20px}
+  .side input{margin:0 16px 12px;padding:10px 14px;border-radius:10px;border:0;background:var(--panel);color:var(--text)}
+  .list{overflow:auto;flex:1}
+  .ct{display:flex;gap:12px;padding:12px 16px;cursor:pointer;align-items:center}
+  .ct:hover,.ct.on{background:var(--panel)}
+  .av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;flex:none}
+  .ct b{display:block;font-size:14px}.ct span{font-size:12px;color:var(--mut)}
+  .main{flex:1;display:flex;flex-direction:column;min-width:0}
+  .head{padding:14px 20px;border-bottom:1px solid #ffffff10;display:flex;gap:12px;align-items:center}
+  .msgs{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:8px}
+  .m{max-width:68%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.4;animation:in .2s}
+  .m.me{align-self:flex-end;background:var(--me);border-bottom-right-radius:4px}
+  .m.th{align-self:flex-start;background:var(--them);border-bottom-left-radius:4px}
+  .m time{display:block;font-size:10px;opacity:.6;margin-top:3px;text-align:right}
+  @keyframes in{from{opacity:0;transform:translateY(6px)}}
+  form{display:flex;gap:10px;padding:14px 20px;border-top:1px solid #ffffff10}
+  form input{flex:1;padding:12px 16px;border-radius:24px;border:0;background:var(--panel);color:var(--text);outline:none}
+  form button{border:0;border-radius:50%;width:44px;background:var(--me);color:#fff;font-size:18px;cursor:pointer}
+  .typing{font-size:12px;color:var(--mut);padding:0 20px 6px;height:18px}
+  @media(max-width:640px){.side{width:84px}.ct div:last-child,.side h2,.side input{display:none}}
+</style>
+</head>
+<body>
+<div class="side"><h2>Chatly</h2><input placeholder="Search chats…"><div class="list" id="list"></div></div>
+<div class="main">
+  <div class="head"><div class="av" id="hav"></div><div><b id="hname"></b><div style="font-size:12px;color:#4ade80">online</div></div></div>
+  <div class="msgs" id="msgs"></div>
+  <div class="typing" id="typing"></div>
+  <form id="f"><input id="in" placeholder="Type a message…" autocomplete="off"><button>➤</button></form>
+</div>
+<script>
+const people=[
+ {n:'Aysel',c:'#ec4899',h:[['th','Hi! Are the designs ready?'],['me','Almost, sending them tonight 🙂']],r:['Great, thanks!','Perfect, talk tomorrow','Can you add a dark mode too?']},
+ {n:'Dev Team',c:'#22c55e',h:[['th','Build #142 passed ✅'],['th','Deploy at 18:00?']],r:['Sounds good','Merging now','Let me check the logs']},
+ {n:'Murad',c:'#f59e0b',h:[['me','Did you see the new game?'],['th','Yes! The snake one is fun']],r:['Haha nice','Send me the link','Beat my score: 24']},
+ {n:'Leyla',c:'#06b6d4',h:[['th','Meeting moved to 3 PM']],r:['Okay, noted','See you there','Thanks for letting me know']}
+];
+let cur=0;
+const $=id=>document.getElementById(id),t=()=>new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+function renderList(){$('list').innerHTML=people.map((p,i)=>`<div class="ct ${i===cur?'on':''}" data-i="${i}"><div class="av" style="background:${p.c}">${p.n[0]}</div><div><b>${p.n}</b><span>${p.h[p.h.length-1][1].slice(0,28)}</span></div></div>`).join('')}
+function renderChat(){const p=people[cur];$('hname').textContent=p.n;$('hav').textContent=p.n[0];$('hav').style.background=p.c;
+ $('msgs').innerHTML=p.h.map(m=>`<div class="m ${m[0]}">${m[1]}<time>${t()}</time></div>`).join('');$('msgs').scrollTop=1e9;renderList()}
+$('list').onclick=e=>{const el=e.target.closest('.ct');if(el){cur=+el.dataset.i;renderChat()}};
+$('f').onsubmit=e=>{e.preventDefault();const v=$('in').value.trim();if(!v)return;const p=people[cur];p.h.push(['me',v]);$('in').value='';renderChat();
+ const who=cur;$('typing').textContent=p.n+' is typing…';
+ setTimeout(()=>{people[who].h.push(['th',people[who].r[Math.floor(Math.random()*3)]]);if(cur===who){$('typing').textContent='';}renderChat()},1200)};
+renderChat();
+</script>
+</body>
+</html>
